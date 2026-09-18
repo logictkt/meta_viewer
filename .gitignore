@@ -1,15 +1,19 @@
 # Bundler and locally installed gems
-/.bundle/
-/vendor/bundle/
-/Gemfile.lock
+/gem/.bundle/
+/gem/vendor/bundle/
+/gem/Gemfile.lock
 
 # Built gem packages
-/pkg/
-/*.gem
+/gem/pkg/
+/gem/*.gem
 
 # Test and coverage output
-/coverage/
-/tmp/
+/gem/coverage/
+/gem/tmp/
+
+# Packaged Chrome extension files
+/chrome-extension/*.crx
+/chrome-extension/*.pem
 
 # Editor and operating-system files
 .DS_Store

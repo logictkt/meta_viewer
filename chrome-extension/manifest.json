@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Meta Viewer",
+  "version": "0.1.0",
+  "description": "Inspect SEO metadata and heading structure on the current page.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "メタチェックを開く / 閉じる"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}

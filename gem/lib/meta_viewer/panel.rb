@@ -38,24 +38,27 @@ module MetaViewer
           const row = (key, value) => { const href = url(value); return `<div class="meta-viewer__row"><div class="meta-viewer__key">${escape(key)}</div><div class="meta-viewer__value">${href ? link(href) : text(key, value)}</div></div>`; };
           const section = (title, rows) => `<section class="meta-viewer__section"><h3>${escape(title)}</h3>${rows || '<p class="meta-viewer__empty">見つかりませんでした</p>'}</section>`;
           const meta = (selector) => Array.from(document.head.querySelectorAll(selector)).map(el => [el.getAttribute('name') || el.getAttribute('property') || el.getAttribute('http-equiv') || el.getAttribute('itemprop') || 'charset', el.content || el.getAttribute('charset')]);
+          const imageMeta = () => Array.from(document.head.querySelectorAll('meta[property="og:image"],meta[name="twitter:image"],meta[name="twitter:image:src"],meta[itemprop="image"],meta[name="image"],meta[property="image"],link[itemprop="image"],link[rel="image_src"]')).map(el => [el.getAttribute('name') || el.getAttribute('property') || el.getAttribute('itemprop') || el.getAttribute('rel') || 'image', el.content || el.href]).filter(([_label, source]) => source);
           const image = (label, url) => { const source = relative(url); return `<article class="meta-viewer__image"><div class="meta-viewer__key">${escape(label)}</div><a href="${escape(source)}" target="_blank" rel="noopener noreferrer"><img src="${escape(source)}" alt="${escape(label)}" data-meta-viewer-image></a><div class="meta-viewer__image-info">${link(source)}<br><span>読み込み中…</span></div></article>`; };
           const robotsNotice = () => {
             const directives = Array.from(document.head.querySelectorAll('meta[name="robots" i],meta[name="googlebot" i],meta[http-equiv="x-robots-tag" i]')).flatMap(el => (el.content || '').toLowerCase().split(/\\s*,\\s*/));
             const noindex = directives.includes('noindex') || directives.includes('none');
             const nofollow = directives.includes('nofollow') || directives.includes('none');
             const nosnippet = directives.includes('nosnippet');
-            const messages = [noindex ? 'このページは index されません。' : 'このページは index されます。'];
+            if (!noindex && !nofollow && !nosnippet) return '';
+            const messages = [];
+            if (noindex) messages.push('このページは index されません。');
             if (nofollow) messages.push('このページ内のリンクは追跡されません。');
             if (nosnippet) messages.push('検索結果のスニペットは表示されません。');
-            return `<div class="meta-viewer__notice${noindex || nofollow || nosnippet ? ' meta-viewer__notice--warning' : ''}"><strong>robots ステータス</strong>${messages.map(escape).join('<br>')}</div>`;
+            return `<div class="meta-viewer__notice meta-viewer__notice--warning"><strong>robots ステータス</strong>${messages.map(escape).join('<br>')}</div>`;
           };
           const headings = () => Array.from(document.body.querySelectorAll('h1,h2,h3,h4,h5,h6')).filter(heading => !heading.closest('[data-meta-viewer]')).map(heading => { const level = heading.tagName.slice(1); const value = heading.textContent.trim() || '（テキストなし）'; return `<div class="meta-viewer__heading meta-viewer__heading--${level}"><span class="meta-viewer__heading-tag">h${level}</span>${escape(value)}</div>`; }).join('');
           const render = () => {
             const basics = [['title', document.title], ['charset', document.characterSet], ['URL', location.href]].map(([k,v]) => row(k,v)).join('');
-            const standard = meta('meta[name="description"],meta[name="robots"],meta[name="viewport"],meta[http-equiv],meta[itemprop]').map(x => row(...x)).join('');
+            const standard = meta('meta[name="description"],meta[name="robots"],meta[name="viewport"],meta[http-equiv],meta[itemprop]').filter(([key]) => key.toLowerCase() !== 'image').map(x => row(...x)).join('');
             const social = meta('meta[property^="og:"],meta[name^="twitter:"],meta[property^="article:"]').filter(([key]) => !/^(og:image|twitter:image(?::src)?)$/i.test(key)).map(x => row(...x)).join('');
             const links = Array.from(document.head.querySelectorAll('link[rel]')).filter(el => /canonical|alternate/.test(el.rel)).map(el => row(`link[rel="${el.rel}"]${el.hreflang ? ` (${el.hreflang})` : ''}`, el.href)).join('');
-            const images = meta('meta[property="og:image"],meta[name="twitter:image"],meta[name="twitter:image:src"]');
+            const images = imageMeta();
             content.innerHTML = robotsNotice() + section('基本情報', basics) + section('SEO メタタグ', standard) + section('Open Graph / X (Twitter)', social) + section('Canonical / hreflang', links) + section('ソーシャル画像', images.map(([label, source]) => image(label, source)).join('')) + section('見出し構造 (h1〜h6)', headings());
             content.querySelectorAll('[data-meta-viewer-image]').forEach(img => { const info = img.closest('.meta-viewer__image').querySelector('.meta-viewer__image-info span'); const show = () => { const width = img.naturalWidth, height = img.naturalHeight; info.textContent = width && height ? `${width} × ${height}px · ${ratio(width, height)} (${(width / height).toFixed(2)}:1)` : '画像を読み込めませんでした'; }; img.addEventListener('load', show); img.addEventListener('error', show); if (img.complete) show(); });
           };

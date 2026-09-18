@@ -68,10 +68,14 @@ class MetaViewerTest < Minitest::Test
     assert_includes MetaViewer::Panel.css, 'h3::before{content:"■ "'
     assert_includes MetaViewer::Panel.javascript, 'target="_blank"'
     assert_includes MetaViewer::Panel.javascript, 'meta[property="og:image"]'
+    assert_includes MetaViewer::Panel.javascript, 'meta[itemprop="image"]'
+    assert_includes MetaViewer::Panel.javascript, 'link[rel="image_src"]'
     assert_includes MetaViewer::Panel.javascript, '文字)</span>'
     assert_includes MetaViewer::Panel.javascript, "img.closest('.meta-viewer__image')"
     assert_includes MetaViewer::Panel.javascript, 'このページは index されません。'
     assert_includes MetaViewer::Panel.javascript, "directives.includes('noindex')"
+    assert_includes MetaViewer::Panel.javascript, "if (!noindex && !nofollow && !nosnippet) return '';"
+    refute_includes MetaViewer::Panel.javascript, 'このページは index されます。'
     assert_includes MetaViewer::Panel.javascript, "section('見出し構造 (h1〜h6)', headings())"
     assert_includes MetaViewer::Panel.javascript, "!heading.closest('[data-meta-viewer]')"
   end
