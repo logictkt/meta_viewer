@@ -12,13 +12,13 @@
 
 ## インストール
 
-アプリケーションの `Gemfile` に追加します。
+この gem は RubyGems には公開していません。Rails アプリケーションからローカルパスで参照します。`path` は Rails アプリケーションの `Gemfile` からこのリポジトリへの相対パスに置き換えてください。
 
 ```ruby
-gem "meta_viewer", group: :development
+gem "meta_viewer", path: "../meta_viewer", group: :development
 ```
 
-次に `bundle install` を実行してください。Rails Engine として自動的に有効になるため、レイアウトへの追記は不要です。
+次に Rails アプリケーション側で `bundle install` を実行してください。Rails Engine として自動的に有効になるため、レイアウトへの追記は不要です。
 
 ## 有効な環境
 
