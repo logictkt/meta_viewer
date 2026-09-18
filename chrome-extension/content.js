@@ -32,7 +32,7 @@
   ]).filter(([_label, source]) => source);
   const image = (label, value) => {
     const source = relative(value);
-    return `<article class="meta-viewer-extension__image"><div class="meta-viewer-extension__key">${escape(label)}</div><a href="${escape(source)}" target="_blank" rel="noopener noreferrer"><img src="${escape(source)}" alt="${escape(label)}" data-meta-viewer-extension-image></a><div class="meta-viewer-extension__image-info">${link(source)}<br><span>読み込み中…</span></div></article>`;
+    return `<article class="meta-viewer-extension__image"><div class="meta-viewer-extension__key">${escape(label)}</div><a href="${escape(source)}" target="_blank" rel="noopener noreferrer"><img src="${escape(source)}" alt="${escape(label)}" data-meta-viewer-extension-image></a><div class="meta-viewer-extension__image-info">${link(source)}<br><span class="meta-viewer-extension__image-dimensions">読み込み中…</span><br><span class="meta-viewer-extension__image-file">ファイル情報を取得中…</span></div></article>`;
   };
   const robotsNotice = () => {
     const directives = Array.from(document.head.querySelectorAll('meta[name="robots" i],meta[name="googlebot" i],meta[http-equiv="x-robots-tag" i]')).flatMap((element) => (element.content || "").toLowerCase().split(/\s*,\s*/));
@@ -57,6 +57,28 @@
     const gcd = (left, right) => right ? gcd(right, left % right) : left;
     const divisor = gcd(first, second);
     return `${first / divisor}:${second / divisor}`;
+  };
+  const typeFromUrl = (source) => {
+    const extension = source.split("?")[0].split(".").pop().toLowerCase();
+    return ({ avif: "image/avif", gif: "image/gif", jpeg: "image/jpeg", jpg: "image/jpeg", png: "image/png", svg: "image/svg+xml", webp: "image/webp" })[extension] || "取得できません";
+  };
+  const formatBytes = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    const units = ["KB", "MB", "GB"];
+    const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)) - 1, units.length - 1);
+    return `${(bytes / (1024 ** (index + 1))).toFixed(index ? 2 : 1)} ${units[index]}`;
+  };
+  const fileInfo = async (source) => {
+    const fallbackType = typeFromUrl(source);
+    try {
+      const response = await fetch(source, { method: "HEAD" });
+      if (!response.ok) throw new Error("HTTP error");
+      const type = response.headers.get("content-type")?.split(";")[0] || fallbackType;
+      const bytes = Number(response.headers.get("content-length"));
+      return { type, size: Number.isFinite(bytes) && bytes >= 0 ? formatBytes(bytes) : "取得できません" };
+    } catch (_) {
+      return { type: fallbackType, size: "取得できません（CORS または応答ヘッダー未対応）" };
+    }
   };
 
   const createPanel = () => {
@@ -90,11 +112,14 @@
     const images = imageMeta();
     content.innerHTML = robotsNotice() + section("基本情報", basics) + section("SEO メタタグ", standard) + section("Open Graph / X (Twitter)", social) + section("Canonical / hreflang", links) + section("ソーシャル画像", images.map(([label, source]) => image(label, source)).join("")) + section("見出し構造 (h1〜h6)", headings());
     content.querySelectorAll("[data-meta-viewer-extension-image]").forEach((element) => {
-      const info = element.closest(".meta-viewer-extension__image").querySelector(".meta-viewer-extension__image-info span");
+      const card = element.closest(".meta-viewer-extension__image");
+      const dimensions = card.querySelector(".meta-viewer-extension__image-dimensions");
+      const file = card.querySelector(".meta-viewer-extension__image-file");
       const show = () => {
         const { naturalWidth: width, naturalHeight: height } = element;
-        info.textContent = width && height ? `${width} × ${height}px · ${ratio(width, height)} (${(width / height).toFixed(2)}:1)` : "画像を読み込めませんでした";
+        dimensions.textContent = width && height ? `${width} × ${height}px · ${ratio(width, height)} (${(width / height).toFixed(2)}:1)` : "画像を読み込めませんでした";
       };
+      fileInfo(element.src).then((info) => { file.textContent = `ファイル種別: ${info.type} · ファイルサイズ: ${info.size}`; });
       element.addEventListener("load", show);
       element.addEventListener("error", show);
       if (element.complete) show();

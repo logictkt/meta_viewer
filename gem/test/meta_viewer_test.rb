@@ -70,6 +70,9 @@ class MetaViewerTest < Minitest::Test
     assert_includes MetaViewer::Panel.javascript, 'meta[property="og:image"]'
     assert_includes MetaViewer::Panel.javascript, 'meta[itemprop="image"]'
     assert_includes MetaViewer::Panel.javascript, 'link[rel="image_src"]'
+    assert_includes MetaViewer::Panel.javascript, "method: 'HEAD'"
+    assert_includes MetaViewer::Panel.javascript, 'ファイル種別:'
+    assert_includes MetaViewer::Panel.javascript, 'ファイルサイズ:'
     assert_includes MetaViewer::Panel.javascript, '文字)</span>'
     assert_includes MetaViewer::Panel.javascript, "img.closest('.meta-viewer__image')"
     assert_includes MetaViewer::Panel.javascript, 'このページは index されません。'
