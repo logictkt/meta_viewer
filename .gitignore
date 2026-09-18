@@ -1,0 +1,18 @@
+# Bundler and locally installed gems
+/.bundle/
+/vendor/bundle/
+/Gemfile.lock
+
+# Built gem packages
+/pkg/
+/*.gem
+
+# Test and coverage output
+/coverage/
+/tmp/
+
+# Editor and operating-system files
+.DS_Store
+*.swp
+*.swo
+.byebug_history
