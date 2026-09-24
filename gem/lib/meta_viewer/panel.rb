@@ -68,7 +68,7 @@ module MetaViewer
           const formatBytes = bytes => { if (bytes < 1024) return `${bytes} B`; const units = ['KB', 'MB', 'GB']; const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)) - 1, units.length - 1); return `${(bytes / (1024 ** (index + 1))).toFixed(index ? 2 : 1)} ${units[index]}`; };
           const open = () => { render(); root.classList.add('is-open'); trigger.setAttribute('aria-expanded','true'); panel.setAttribute('aria-hidden','false'); };
           const shut = () => { root.classList.remove('is-open'); trigger.setAttribute('aria-expanded','false'); panel.setAttribute('aria-hidden','true'); };
-          trigger.addEventListener('click', open); close.addEventListener('click', shut); document.addEventListener('keydown', event => { if (event.key === 'Escape') shut(); });
+          trigger.addEventListener('click', open); close.addEventListener('click', shut); document.addEventListener('click', event => { if (root.classList.contains('is-open') && !root.contains(event.target)) shut(); }, true); document.addEventListener('keydown', event => { if (event.key === 'Escape') shut(); });
         })();
       JS
     end

@@ -96,6 +96,9 @@
       <div class="meta-viewer-extension__content" aria-live="polite"></div>`;
     (document.body || document.documentElement).append(root);
     root.querySelector(".meta-viewer-extension__close").addEventListener("click", () => root.classList.remove("is-open"));
+    document.addEventListener("click", (event) => {
+      if (root.classList.contains("is-open") && !root.contains(event.target)) root.classList.remove("is-open");
+    }, true);
     return root;
   };
 

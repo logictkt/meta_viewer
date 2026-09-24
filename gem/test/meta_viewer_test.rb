@@ -12,6 +12,10 @@ class MetaViewerTest < Minitest::Test
     refute MetaViewer.enabled?("production")
   end
 
+  def test_exposes_the_minor_version_update
+    assert_equal "0.2.0", MetaViewer::VERSION
+  end
+
   def test_accepts_an_explicit_environment_allow_list
     MetaViewer.configure { |config| config.environments = %w[development staging] }
 
@@ -75,6 +79,7 @@ class MetaViewerTest < Minitest::Test
     assert_includes MetaViewer::Panel.javascript, 'ファイルサイズ:'
     assert_includes MetaViewer::Panel.javascript, '文字)</span>'
     assert_includes MetaViewer::Panel.javascript, "img.closest('.meta-viewer__image')"
+    assert_includes MetaViewer::Panel.javascript, "!root.contains(event.target)"
     assert_includes MetaViewer::Panel.javascript, 'このページは index されません。'
     assert_includes MetaViewer::Panel.javascript, "directives.includes('noindex')"
     assert_includes MetaViewer::Panel.javascript, "if (!noindex && !nofollow && !nosnippet) return '';"
