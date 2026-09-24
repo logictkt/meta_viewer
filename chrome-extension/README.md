@@ -1,6 +1,6 @@
 # Meta Viewer Chrome Extension
 
-SEO メタ情報を現在のタブ上で確認する Manifest V3 拡張機能です。ページ内に常設ボタンは追加しません。Chrome のツールバーにある Meta Viewer アイコンを押すと、右側からパネルを開閉します。
+SEO メタ情報を現在のタブ上で確認する Manifest V3 拡張機能です。ページ内に常設ボタンは追加しません。Chrome のツールバーにある Meta Viewer アイコンを押すと、拡張機能の popup に情報を表示します。ページへ UI を挿入しないため、サイト側の CSS の影響を受けません。
 
 パネルには title、description、robots、canonical、hreflang、Open Graph、X (Twitter) Card、ソーシャル画像のプレビューと寸法、h1〜h6 の見出し構造を表示します。
 
@@ -12,4 +12,4 @@ SEO メタ情報を現在のタブ上で確認する Manifest V3 拡張機能で
 4. この `chrome-extension` ディレクトリを選択します。
 5. 対象ページを開き、ツールバーの拡張機能ボタンから Meta Viewer を押します。
 
-拡張機能ボタンをもう一度押すか、パネル右上の × を押すと閉じます。`chrome://` など Chrome がスクリプト注入を許可しないページでは利用できません。
+popup の外側をクリックすると閉じます。`chrome://` など Chrome がスクリプト注入を許可しないページでは利用できません。

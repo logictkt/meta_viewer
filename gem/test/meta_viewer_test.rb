@@ -13,7 +13,7 @@ class MetaViewerTest < Minitest::Test
   end
 
   def test_exposes_the_minor_version_update
-    assert_equal "0.2.0", MetaViewer::VERSION
+    assert_equal "1.0.0", MetaViewer::VERSION
   end
 
   def test_accepts_an_explicit_environment_allow_list

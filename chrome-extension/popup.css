@@ -1,0 +1,24 @@
+:root { color: #172033; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+body { margin: 0; width: 430px; }
+.meta-viewer-popup { height: 2040px; overflow: visible; padding: 0 18px 24px; }
+.meta-viewer-popup *, .meta-viewer-popup *::before, .meta-viewer-popup *::after { box-sizing: border-box; }
+.meta-viewer-popup__header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 18px 0 12px; position: sticky; top: 0; z-index: 1; }
+.meta-viewer-popup__header h1 { font-size: 18px; margin: 0; }
+.meta-viewer-popup__hint { color: #6b7280; font-size: 12px; margin: 14px 0; }
+.meta-viewer-popup__notice { background: #fef2f2; border: 1px solid #fecaca; border-radius: 7px; color: #b91c1c; font-size: 13px; line-height: 1.45; margin: 14px 0; padding: 10px; }
+.meta-viewer-popup__notice strong { display: block; font-size: 11px; margin-bottom: 3px; }
+.meta-viewer-popup__section { margin: 0 0 20px; }
+.meta-viewer-popup__section h2 { border-bottom: 1px solid #e5e7eb; font-size: 14px; margin: 0 0 8px; padding-bottom: 6px; }
+.meta-viewer-popup__section h2::before { color: #3730a3; content: "■ "; }
+.meta-viewer-popup__row { border-bottom: 1px solid #f0f1f3; padding: 9px 0; }
+.meta-viewer-popup__key { color: #4b5563; font: 600 11px ui-monospace, SFMono-Regular, monospace; overflow-wrap: anywhere; }
+.meta-viewer-popup__value { font-size: 13px; line-height: 1.45; margin-top: 3px; overflow-wrap: anywhere; }
+.meta-viewer-popup__link { color: #2563eb; text-decoration: underline; }
+.meta-viewer-popup__count { color: #6b7280; font-size: 11px; white-space: nowrap; }
+.meta-viewer-popup__empty, .meta-viewer-popup__error { color: #6b7280; font-size: 13px; }
+.meta-viewer-popup__image { border: 1px solid #e5e7eb; border-radius: 7px; margin: 12px 0; padding: 10px; }
+.meta-viewer-popup__image img { background: #f8fafc; border-radius: 4px; max-height: 190px; object-fit: contain; width: 100%; }
+.meta-viewer-popup__image-info { color: #4b5563; font-size: 12px; margin-top: 6px; overflow-wrap: anywhere; }
+.meta-viewer-popup__heading { border-left: 3px solid #c7d2fe; font-size: 13px; line-height: 1.45; margin: 6px 0; padding: 5px 7px; }
+.meta-viewer-popup__heading--1 { margin-left: 0; }.meta-viewer-popup__heading--2 { margin-left: 12px; }.meta-viewer-popup__heading--3 { margin-left: 24px; }.meta-viewer-popup__heading--4 { margin-left: 36px; }.meta-viewer-popup__heading--5 { margin-left: 48px; }.meta-viewer-popup__heading--6 { margin-left: 60px; }
+.meta-viewer-popup__heading-tag { color: #4f46e5; font: 600 11px ui-monospace, SFMono-Regular, monospace; margin-right: 6px; }
